@@ -7,8 +7,8 @@ Author: Bellevue College Technology Development and Communications
 Version: 1.0
 
 */
-
 require_once("cybersource-options.php");
+
 // Adding Application Fees setting to Form Settings
 add_filter( 'gform_form_settings', 'form_fees_setting', 10, 2 );
 function form_fees_setting( $settings, $form ) {
@@ -32,12 +32,14 @@ function save_my_custom_form_setting($form) {
 // Redirecting to cybersource using post data
 
 add_action( 'gform_confirmation', 'post_to_cybersource', 10, 4 );
-function post_to_cybersource($confirmation, $entry, $form ) {
-    $form_object = GFAPI::get_form($form['form_id']);    
+function post_to_cybersource($confirmation, $form, $entry ) {
+    $form_object = GFAPI::get_form($form['id']);    
     $options = get_option('cybersource');
     $secret_key = $options["cybersource_secret_key"];  
     $post_url = $options['cybersource_form_post_url'];  
-    $reference_number = $form['form_id']."-".$entry['id'];  
+    //error_log(print_r($entry,true));
+    //error_log("Form object:".print_r($form,true));
+    $reference_number =$entry['id']; //$form['id']."-".$entry['id'];  
     $transaction_uuid = uniqid();   
     $fields_map = array (
                         'access_key' => $options['cybersource_access_key'],
@@ -98,7 +100,7 @@ function set_signature($fields_map,$secret_key)
     {
             $data_to_sign .= "$field=$value,";
     }
-    error_log("data : ".$data_to_sign);
+    //error_log("data : ".$data_to_sign);
     // Remove trailing comma
     $data_to_sign = substr( $data_to_sign, 0, -1 );
     $hash = hash_hmac(
@@ -111,9 +113,24 @@ function set_signature($fields_map,$secret_key)
     return $signature;
 }
 
+
+// Create cron job
+
+register_activation_hook(__FILE__, 'cybersource_cron_activation');
+
+function cybersource_cron_activation() {
+    if (! wp_next_scheduled ( 'my_hourly_event' )) {
+	wp_schedule_event(time(), 'hourly', 'cybersource_hourly_event');
+    }
+}
+
+add_action('cybersource_hourly_event', 'get_cybersource_settlements');
+
+function get_cybersource_settlements() {
+	// curl to cybersource report url and get settlement information, and update
+    
+    
+    
+    
+}
 ?>
-
-
-
-
-

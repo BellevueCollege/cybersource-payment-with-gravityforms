@@ -49,7 +49,7 @@ function cybersourceoptions_do_page() {
 					<td><input type="text" name="cybersource[cybersource_transaction_type]" value="<?php echo $options['cybersource_transaction_type']; ?>" /></td>
 				</tr>
                                 
-                                <tr valign="top"><th scope="row">Cyber Source Merchant ID</th>
+<!--                                <tr valign="top"><th scope="row">Cyber Source Merchant ID</th>
 					<td><input type="text" name="cybersource[cybersource_merchant_id]" value="<?php echo $options['cybersource_merchant_id']; ?>" /></td>
 				</tr>
                                 <tr valign="top"><th scope="row">Cyber Source Report User</th>
@@ -63,7 +63,7 @@ function cybersourceoptions_do_page() {
 				</tr>
                                 <tr valign="top"><th scope="row">Cyber Source Shared Secret</th>
 					<td><input type="text" name="cybersource[cybersource_shared_secret]" value="<?php echo $options['cybersource_shared_secret']; ?>" /></td>
-				</tr>
+				</tr>-->
 			</table>
 			<p class="submit">
 			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -83,3 +83,4 @@ function cybersourceoptions_validate($input) {
 	
 	return $input;
 }
+?>
